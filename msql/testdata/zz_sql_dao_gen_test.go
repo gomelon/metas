@@ -17,7 +17,7 @@ func TestCRUD(t *testing.T) {
 	// prepare
 	tm, closeFunc := tm()
 	defer closeFunc()
-	var userDao UserDao = NewUserDaoImpl(tm)
+	var userDao UserDao = NewUserDaoSQLImpl(tm)
 
 	// execute
 	var err error
@@ -146,7 +146,7 @@ func TestTransactionRollback(t *testing.T) {
 	// prepare
 	tm, closeFunc := tm()
 	defer closeFunc()
-	var userDao UserDao = NewUserDaoImpl(tm)
+	var userDao UserDao = NewUserDaoSQLImpl(tm)
 
 	// execute
 	ctx := context.Background()
@@ -197,7 +197,7 @@ func tm() (tm *data.SQLTXManager, closeFunc func()) {
 	return
 }
 
-func (_impl *UserDaoImpl) Insert(ctx context.Context, user *User) (*User, error) {
+func (_impl *UserDaoSQLImpl) Insert(ctx context.Context, user *User) (*User, error) {
 	query := "INSERT INTO `user`(`name`,`gender`,`birthday`)" +
 		"VALUES (?, ?, ?)"
 	db := _impl._tm.OriginTXOrDB(ctx)
@@ -210,7 +210,7 @@ func (_impl *UserDaoImpl) Insert(ctx context.Context, user *User) (*User, error)
 	return user, err
 }
 
-func (_impl *UserDaoImpl) UpdateById(ctx context.Context, id int64, user *User) (int64, error) {
+func (_impl *UserDaoSQLImpl) UpdateById(ctx context.Context, id int64, user *User) (int64, error) {
 	query := "UPDATE `user` SET `name`= ?, `gender` = ?, `birthday` = ?, `created_at` = ? " +
 		"WHERE `id` = ?"
 	db := _impl._tm.OriginTXOrDB(ctx)

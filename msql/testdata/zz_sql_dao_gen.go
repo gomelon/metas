@@ -7,17 +7,17 @@ import (
 	"github.com/gomelon/melon/data"
 )
 
-type UserDaoImpl struct {
+type UserDaoSQLImpl struct {
 	_tm *data.SQLTXManager
 }
 
-func NewUserDaoImpl(_tm *data.SQLTXManager) *UserDaoImpl {
-	return &UserDaoImpl{
+func NewUserDaoSQLImpl(_tm *data.SQLTXManager) *UserDaoSQLImpl {
+	return &UserDaoSQLImpl{
 		_tm: _tm,
 	}
 }
 
-func (_impl *UserDaoImpl) CountByBirthdayGTE(ctx context.Context, time time.Time) (int, error) {
+func (_impl *UserDaoSQLImpl) CountByBirthdayGTE(ctx context.Context, time time.Time) (int, error) {
 	_sql := "SELECT COUNT(*) AS X FROM `user` WHERE (`birthday` >= ?)"
 	_rows, _err := _impl._tm.OriginTXOrDB(ctx).
 		Query(_sql, time)
@@ -38,7 +38,7 @@ func (_impl *UserDaoImpl) CountByBirthdayGTE(ctx context.Context, time time.Time
 	return _item, _err
 }
 
-func (_impl *UserDaoImpl) CountByBirthdayGTE2(ctx context.Context, time time.Time) (int, error) {
+func (_impl *UserDaoSQLImpl) CountByBirthdayGTE2(ctx context.Context, time time.Time) (int, error) {
 	_sql := "select count(*) as count from `user` where birthday >= ?"
 	_rows, _err := _impl._tm.OriginTXOrDB(ctx).
 		Query(_sql, time)
@@ -59,7 +59,7 @@ func (_impl *UserDaoImpl) CountByBirthdayGTE2(ctx context.Context, time time.Tim
 	return _item, _err
 }
 
-func (_impl *UserDaoImpl) DeleteById(ctx context.Context, id int64) (int64, error) {
+func (_impl *UserDaoSQLImpl) DeleteById(ctx context.Context, id int64) (int64, error) {
 	_sql := "DELETE FROM `user` WHERE (`id` = ?)"
 	_result, err := _impl._tm.OriginTXOrDB(ctx).
 		Exec(_sql, id)
@@ -69,7 +69,7 @@ func (_impl *UserDaoImpl) DeleteById(ctx context.Context, id int64) (int64, erro
 	return _result.RowsAffected()
 }
 
-func (_impl *UserDaoImpl) DeleteById2(ctx context.Context, id int64) (int64, error) {
+func (_impl *UserDaoSQLImpl) DeleteById2(ctx context.Context, id int64) (int64, error) {
 	_sql := "delete from `user` where id = ?"
 	_result, err := _impl._tm.OriginTXOrDB(ctx).
 		Exec(_sql, id)
@@ -79,7 +79,7 @@ func (_impl *UserDaoImpl) DeleteById2(ctx context.Context, id int64) (int64, err
 	return _result.RowsAffected()
 }
 
-func (_impl *UserDaoImpl) ExistsById(ctx context.Context, id int64) (bool, error) {
+func (_impl *UserDaoSQLImpl) ExistsById(ctx context.Context, id int64) (bool, error) {
 	_sql := "SELECT 1 AS X FROM `user` WHERE (`id` = ?) LIMIT 0, 1"
 	_rows, _err := _impl._tm.OriginTXOrDB(ctx).
 		Query(_sql, id)
@@ -100,7 +100,7 @@ func (_impl *UserDaoImpl) ExistsById(ctx context.Context, id int64) (bool, error
 	return _item, _err
 }
 
-func (_impl *UserDaoImpl) ExistsById2(ctx context.Context, id int64) (bool, error) {
+func (_impl *UserDaoSQLImpl) ExistsById2(ctx context.Context, id int64) (bool, error) {
 	_sql := "select 1 as X from `user` WHERE id = ? limit 1"
 	_rows, _err := _impl._tm.OriginTXOrDB(ctx).
 		Query(_sql, id)
@@ -121,7 +121,7 @@ func (_impl *UserDaoImpl) ExistsById2(ctx context.Context, id int64) (bool, erro
 	return _item, _err
 }
 
-func (_impl *UserDaoImpl) FindByBirthdayGTE(ctx context.Context, time time.Time) ([]*User, error) {
+func (_impl *UserDaoSQLImpl) FindByBirthdayGTE(ctx context.Context, time time.Time) ([]*User, error) {
 	_sql := "SELECT id, name, gender, birthday, created_at FROM `user` WHERE (`birthday` >= ?)"
 	_rows, _err := _impl._tm.OriginTXOrDB(ctx).
 		Query(_sql, time)
@@ -148,7 +148,7 @@ func (_impl *UserDaoImpl) FindByBirthdayGTE(ctx context.Context, time time.Time)
 	return _items, nil
 }
 
-func (_impl *UserDaoImpl) FindByBirthdayGTE2(ctx context.Context, time time.Time) ([]*User, error) {
+func (_impl *UserDaoSQLImpl) FindByBirthdayGTE2(ctx context.Context, time time.Time) ([]*User, error) {
 	_sql := "select id, name, gender, birthday, created_at from `user` where birthday >= ?"
 	_rows, _err := _impl._tm.OriginTXOrDB(ctx).
 		Query(_sql, time)
@@ -175,7 +175,7 @@ func (_impl *UserDaoImpl) FindByBirthdayGTE2(ctx context.Context, time time.Time
 	return _items, nil
 }
 
-func (_impl *UserDaoImpl) FindById(ctx context.Context, id int64) (*User, error) {
+func (_impl *UserDaoSQLImpl) FindById(ctx context.Context, id int64) (*User, error) {
 	_sql := "SELECT id, name, gender, birthday, created_at FROM `user` WHERE (`id` = ?)"
 	_rows, _err := _impl._tm.OriginTXOrDB(ctx).
 		Query(_sql, id)
@@ -196,7 +196,7 @@ func (_impl *UserDaoImpl) FindById(ctx context.Context, id int64) (*User, error)
 	return _item, _err
 }
 
-func (_impl *UserDaoImpl) FindById2(ctx context.Context, id int64) (*User, error) {
+func (_impl *UserDaoSQLImpl) FindById2(ctx context.Context, id int64) (*User, error) {
 	_sql := "select id, name, gender, birthday, created_at from `user` where id = ?"
 	_rows, _err := _impl._tm.OriginTXOrDB(ctx).
 		Query(_sql, id)
