@@ -23,11 +23,11 @@ type functions struct {
 	defaultEngine engine.Engine
 }
 
-func NewFunctions(generator *meta.TmplPkgGen, defaultEngine engine.Engine) *functions {
+func NewFunctions(gen *meta.TmplPkgGen, defaultEngine engine.Engine) *functions {
 	return &functions{
 		ruleParser:    data.NewRuleParser(),
-		pkgParser:     generator.PkgParser(),
-		metaParser:    generator.MetaParser(),
+		pkgParser:     gen.PkgParser(),
+		metaParser:    gen.MetaParser(),
 		defaultEngine: defaultEngine,
 	}
 }

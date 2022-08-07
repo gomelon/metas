@@ -7,6 +7,8 @@ import (
 	"github.com/gomelon/melon/data"
 )
 
+var _ UserDao = &UserDaoSQLImpl{}
+
 type UserDaoSQLImpl struct {
 	_tm *data.SQLTXManager
 }

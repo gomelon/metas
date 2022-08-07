@@ -2,6 +2,7 @@
     {{$tableMeta := index ( objectMetaGroup $itf "sql:table" ) 0}}
 
     {{$decorator := print $itf.Name "SQLImpl"}}
+    var _ {{typeString $itf.Type}} = &{{$decorator}}{}
     {{$structTplParams:=dict "itf" $itf "tableMeta" $tableMeta "decorator" $decorator}}
     {{template "decorator_struct" $structTplParams}}
 
