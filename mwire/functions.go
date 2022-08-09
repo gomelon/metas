@@ -58,6 +58,10 @@ type ProviderHolder struct {
 func (f *functions) ParseWire() (result *ParsedWireResult, err error) {
 	result = &ParsedWireResult{}
 	pkgFunctions := f.pkgParser.Functions(f.pkgPath)
+	if len(pkgFunctions) == 0 {
+		return
+	}
+
 	result.Providers = f.metaParser.FilterByMeta(MetaWireProvider, pkgFunctions)
 
 	providerTypeItfToProviders := map[types.Type][]types.Object{}

@@ -7,15 +7,15 @@
 package main
 
 import (
-	"github.com/gomelon/meta-templates/mwire/testdata/bar"
+	"github.com/gomelon/metas/mwire/testdata/bar"
 )
 
 // Injectors from wire.go:
 
 func initApp(greeting bar.Greeting, bye bar.Bye) (*App, error) {
 	defaultFoo := bar.NewDefaultFoo()
-	fooWithGreet := bar.NewFooWithGreet(defaultFoo, greeting)
-	fooWithBye := bar.NewFooWithBye(fooWithGreet, bye)
-	app := NewApp(fooWithBye)
+	fooAOPWithGreetImpl := bar.NewFooAOPWithGreet(defaultFoo, greeting)
+	fooAOPWithByeImpl := bar.NewFooAOPWithBye(fooAOPWithGreetImpl, bye)
+	app := NewApp(fooAOPWithByeImpl)
 	return app, nil
 }

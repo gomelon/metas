@@ -9,7 +9,7 @@ import (
 	"github.com/gomelon/melon/data/query"
 	"github.com/gomelon/melon/third_party/sqlx"
 	"github.com/gomelon/meta"
-	"github.com/gomelon/meta-templates/msql/parser"
+	"github.com/gomelon/metas/msql/parser"
 	"github.com/huandu/xstrings"
 	"go/types"
 	"strings"

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/gomelon/meta-templates/mwire/testdata/bar"
+	"github.com/gomelon/metas/mwire/testdata/foo"
 )
 
 type App struct {
-	foo bar.Foo
+	foo foo.Foo
 }
 
-func NewApp(foo bar.Foo) *App {
+func NewApp(foo foo.Foo) *App {
 	return &App{foo: foo}
 }

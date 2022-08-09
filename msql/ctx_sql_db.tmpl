@@ -36,6 +36,8 @@ type {{.decorator}} struct {
     _tm *{{$melonPkg}}.SQLTXManager
 }
 
+//New{{.decorator}} {{.decorator}} provider
+//wire:provider
 func New{{.decorator}}(_tm *{{$melonPkg}}.SQLTXManager) *{{.decorator}}{
     return &{{.decorator}}{
         _tm: _tm,

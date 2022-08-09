@@ -12,8 +12,11 @@ import (
 var TmplWire string
 
 func DefaultPkgGenFactory() meta.PkgGenFactory {
+	pkgParser := meta.NewPkgParser()
 	return meta.NewTmplPkgGenFactory(TmplWire,
 		meta.WithOutputFilename("wire_set"),
+		meta.WithPkgParser(pkgParser),
+		meta.WithMetaParser(meta.NewParser(pkgParser)),
 		meta.WithFuncMapFactory(
 			func(gen *meta.TmplPkgGen) template.FuncMap {
 				return NewFunctions(gen).FuncMap()

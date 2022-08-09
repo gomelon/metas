@@ -6,7 +6,7 @@
 package main
 
 import (
-	"github.com/gomelon/meta-templates/mwire/testdata/bar"
+	"github.com/gomelon/metas/mwire/testdata/bar"
 	"github.com/google/wire"
 )
 
