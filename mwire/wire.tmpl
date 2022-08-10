@@ -8,7 +8,7 @@
     {{end}}
 
     {{range $binding := $parsedWireResult.Bindings -}}
-        {{$wirePkg}}.Bind(new({{typeString $binding.InjectedItf}}),new({{typeString $binding.ProviderType}})),
+        {{$wirePkg}}.Bind(new({{typeString $binding.InjectedIface}}),new({{typeString $binding.ProviderType}})),
     {{end}}
     )
 {{end}}

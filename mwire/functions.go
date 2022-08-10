@@ -41,11 +41,11 @@ func (r *ParsedWireResult) HasProvider() bool {
 }
 
 type ProviderHolder struct {
-	Provider     types.Object
-	ProviderType types.Type
-	InjectedItf  types.Type
-	Order        int32
-	IsBase       bool
+	Provider      types.Object
+	ProviderType  types.Type
+	InjectedIface types.Type
+	Order         int32
+	IsBase        bool
 }
 
 //ParseWire
@@ -64,7 +64,7 @@ func (f *functions) ParseWire() (result *ParsedWireResult, err error) {
 
 	result.Providers = f.metaParser.FilterByMeta(MetaWireProvider, pkgFunctions)
 
-	providerTypeItfToProviders := map[types.Type][]types.Object{}
+	providerTypeIfaceToProviders := map[types.Type][]types.Object{}
 	for _, function := range result.Providers {
 		providerObj := f.pkgParser.FirstResult(function)
 		if providerObj == nil {
@@ -78,8 +78,8 @@ func (f *functions) ParseWire() (result *ParsedWireResult, err error) {
 			continue
 		}
 
-		for _, itf := range providerInterfaces {
-			providerTypeItfToProviders[itf] = append(providerTypeItfToProviders[itf], function)
+		for _, iface := range providerInterfaces {
+			providerTypeIfaceToProviders[iface] = append(providerTypeIfaceToProviders[iface], function)
 		}
 
 		firstParam := f.pkgParser.FirstParam(function)
@@ -88,32 +88,32 @@ func (f *functions) ParseWire() (result *ParsedWireResult, err error) {
 		}
 	}
 
-	for providerTypeItf, itfProviders := range providerTypeItfToProviders {
+	for providerTypeIface, itfProviders := range providerTypeIfaceToProviders {
 		itfProviderHolders := make([]*ProviderHolder, 0, len(itfProviders))
 		for _, provider := range itfProviders {
 			providerObject := f.pkgParser.FirstResult(provider)
 			params := f.pkgParser.Params(provider)
 			needInjectParam := false
 			for _, param := range params {
-				if !f.pkgParser.AssignableTo(param.Type(), providerTypeItf) {
+				if !f.pkgParser.AssignableTo(param.Type(), providerTypeIface) {
 					continue
 				}
 				needInjectParam = true
 				wireMeta := f.metaParser.ObjectMetaGroup(provider, MetaWireProvider)[0]
 				providerHolder := &ProviderHolder{
-					Provider:     provider,
-					ProviderType: providerObject.Type(),
-					InjectedItf:  param.Type(),
-					Order:        Order(wireMeta),
+					Provider:      provider,
+					ProviderType:  providerObject.Type(),
+					InjectedIface: param.Type(),
+					Order:         Order(wireMeta),
 				}
 				itfProviderHolders = append(itfProviderHolders, providerHolder)
 			}
 			if !needInjectParam {
 				providerHolder := &ProviderHolder{
-					Provider:     provider,
-					ProviderType: providerObject.Type(),
-					InjectedItf:  providerTypeItf,
-					IsBase:       true,
+					Provider:      provider,
+					ProviderType:  providerObject.Type(),
+					InjectedIface: providerTypeIface,
+					IsBase:        true,
 				}
 				itfProviderHolders = append(itfProviderHolders, providerHolder)
 			}
@@ -125,8 +125,8 @@ func (f *functions) ParseWire() (result *ParsedWireResult, err error) {
 						itfProviderHolders[i].Provider.Name() > itfProviderHolders[j].Provider.Name())
 		})
 		for i, size := 0, len(itfProviderHolders); i < size-1; i++ {
-			itfProviderHolders[i].InjectedItf, itfProviderHolders[i+1].InjectedItf =
-				itfProviderHolders[i+1].InjectedItf, itfProviderHolders[i].InjectedItf
+			itfProviderHolders[i].InjectedIface, itfProviderHolders[i+1].InjectedIface =
+				itfProviderHolders[i+1].InjectedIface, itfProviderHolders[i].InjectedIface
 		}
 		result.Bindings = append(result.Bindings, itfProviderHolders...)
 	}
