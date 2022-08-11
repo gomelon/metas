@@ -26,7 +26,7 @@ type User struct {
 	CreatedAt time.Time
 }
 
-//UserDao 用户信息Dao
+//UserDao
 //sql:table name=`user` dialect="mysql"
 type UserDao interface {
 	FindById(ctx context.Context, id int64) (*User, error)

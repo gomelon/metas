@@ -33,8 +33,7 @@ var (
 	MetaNames = []string{MetaWireProvider}
 )
 
-//Order It is the injection order. The smaller the value, the earlier the injection is,
-//and the closer it is to the realization.
+//Order It is the injection order,lower values have higher priority(closer it is to the realization).
 func Order(m *meta.Meta) int32 {
 	orderStr := m.Property("order")
 	if len(orderStr) == 0 {
