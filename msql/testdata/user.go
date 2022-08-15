@@ -31,23 +31,23 @@ type User struct {
 type UserDao interface {
 	FindById(ctx context.Context, id int64) (*User, error)
 
-	FindByBirthdayGTE(ctx context.Context /*sql:param ctx*/, time time.Time) ([]*User, error)
+	FindByBirthdayGTE(ctx context.Context, time time.Time) ([]*User, error)
 
 	ExistsById(ctx context.Context, id int64) (bool, error)
 
-	CountByBirthdayGTE(ctx context.Context /*sql:param ctx*/, time time.Time) (int, error)
+	CountByBirthdayGTE(ctx context.Context, time time.Time) (int, error)
 
 	/*sql:select query="select * from `user` where id = :id" master*/
 	FindById2(ctx context.Context, id int64) (*User, error)
 
 	/*sql:select query="select * from `user` where birthday >= :time"*/
-	FindByBirthdayGTE2(ctx context.Context /*sql:param ctx*/, time time.Time) ([]*User, error)
+	FindByBirthdayGTE2(ctx context.Context, time time.Time) ([]*User, error)
 
 	/*sql:select query="select 1 as X from `user` WHERE id = :id limit 1"*/
 	ExistsById2(ctx context.Context, id int64) (bool, error)
 
 	/*sql:select query="select count(*) as count from `user` where birthday >= :time"*/
-	CountByBirthdayGTE2(ctx context.Context /*sql:param ctx*/, time time.Time) (int, error)
+	CountByBirthdayGTE2(ctx context.Context, time time.Time) (int, error)
 
 	//Insert
 	//sql:none

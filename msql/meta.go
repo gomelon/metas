@@ -10,12 +10,12 @@ import (
 //go:embed ctx_sql_db.tmpl
 var TmplSQL string
 
-func DefaultPkgGenFactory() meta.PkgGenFactory {
+func DefaultPkgGenFactory(defaultEngine engine.Engine) meta.PkgGenFactory {
 	return meta.NewTmplPkgGenFactory(TmplSQL,
 		meta.WithOutputFilename("sql_dao"),
 		meta.WithFuncMapFactory(
 			func(generator *meta.TmplPkgGen) template.FuncMap {
-				return NewFunctions(generator, engine.NewMySQL()).FuncMap()
+				return NewFunctions(generator, defaultEngine).FuncMap()
 			},
 		),
 	)

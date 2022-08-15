@@ -41,6 +41,7 @@ func (f *functions) FuncMap() template.FuncMap {
 		"deleteMeta":        f.DeleteMeta,
 		"rewriteDeleteStmt": f.RewriteDeleteStmt,
 		"queryArgs":         f.QueryArgs,
+		"dialect":           f.Dialect,
 	}
 }
 
@@ -122,7 +123,7 @@ func (f *functions) SelectMeta(method types.Object, tableMeta *meta.Meta) (selec
 }
 
 func (f *functions) RewriteSelectStmt(method types.Object, table *meta.Meta, sel *meta.Meta) (query string, err error) {
-	dialect := f.dialect(table)
+	dialect := f.Dialect(table)
 
 	originQuery := Query(sel)
 	query, _, err = f.compileNamedQuery(originQuery, dialect)
@@ -215,13 +216,13 @@ func (f *functions) DeleteMeta(method types.Object, tableMeta *meta.Meta) (delet
 }
 
 func (f *functions) RewriteDeleteStmt(_ types.Object, table *meta.Meta, queryMeta *meta.Meta) (query string, err error) {
-	dialect := f.dialect(table)
+	dialect := f.Dialect(table)
 	query, _, err = f.compileNamedQuery(Query(queryMeta), dialect)
 	return
 }
 
 func (f *functions) ScanFields(method types.Object, table *meta.Meta, sql string, item string) (string, error) {
-	dialect := f.dialect(table)
+	dialect := f.Dialect(table)
 
 	var err error
 
@@ -253,7 +254,7 @@ func (f *functions) ScanFields(method types.Object, table *meta.Meta, sql string
 }
 
 func (f *functions) QueryArgs(method types.Object, table *meta.Meta, queryMeta *meta.Meta) (nameArgsStr string, err error) {
-	dialect := f.dialect(table)
+	dialect := f.Dialect(table)
 	originQuery := Query(queryMeta)
 	_, queryNames, err := f.compileNamedQuery(originQuery, dialect)
 	if err != nil {
@@ -271,6 +272,10 @@ func (f *functions) QueryArgs(method types.Object, table *meta.Meta, queryMeta *
 		err = fmt.Errorf("parse sql fail: %w, method=[%s],sql=%s", err, method.String(), originQuery)
 	}
 	return
+}
+
+func (f *functions) Dialect(table *meta.Meta) string {
+	return f.engine(table).Dialect()
 }
 
 func (f *functions) positionArgsStr(toArgsMethodParams []types.Object) string {
@@ -363,10 +368,6 @@ func (f *functions) connectTableQualifier(tableQualifier, column string) string 
 		return column
 	}
 	return tableQualifier + "." + column
-}
-
-func (f *functions) dialect(table *meta.Meta) string {
-	return f.engine(table).Dialect()
 }
 
 func (f *functions) engine(table *meta.Meta) engine.Engine {
