@@ -1,0 +1,31 @@
+{{range $struct := structs|filterByMeta "+iface.Iface"}}
+    {{$metaIface:=objectMeta $struct "+iface.Iface"}}
+
+    {{$decorator := $metaIface.Property "Name"}}
+    {{if eq (len $decorator) 0}}
+        {{$decorator = print $struct.Name "Iface"}}
+    {{end}}
+
+    {{template "comments" dict "struct" $struct -}}
+    type {{$decorator}} interface {
+    {{range $method := $struct|methods}}
+        {{if $method|exported}}
+            {{$method|declare}}
+        {{end}}
+    {{end}}
+    }
+{{end}}
+
+{{define "comments" -}}
+    {{$comments := objectComments .struct -}}
+    {{range $comment := $comments -}}
+        {{if (hasPrefix "+iface.Comment " $comment) -}}
+            {{if (contains "\n" $comment) -}}
+                /*{{trimPrefix "+iface.Comment " $comment}}
+                */
+            {{else -}}
+                //{{trimPrefix "+iface.Comment " $comment}}
+            {{end -}}
+        {{end -}}
+    {{end -}}
+{{end}}
